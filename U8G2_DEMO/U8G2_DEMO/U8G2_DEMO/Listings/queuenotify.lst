@@ -1,0 +1,14 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+                       
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
+ork --depend=.\objects\queuenotify.d -o.\objects\queuenotify.o -I.\RTE\_Target_
+1 -IE:\Keil\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include -IE:\Keil\ARM\CMSI
+S\Include --predefine="__MICROLIB SETA 1" --predefine="__UVISION_VERSION SETA 5
+24" --predefine="STM32F10X_MD SETA 1" --list=.\listings\queuenotify.lst TaskNot
+ify\QueueNotify.s
+333 symbols in table
