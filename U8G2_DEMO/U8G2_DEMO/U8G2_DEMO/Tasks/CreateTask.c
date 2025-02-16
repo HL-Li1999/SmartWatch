@@ -18,23 +18,22 @@
 #include "GyroTask.h"
 
 
-/*¾ä±ú*/
-//ÎÊÌâ1£ºÎªÊ²Ã´ÕâÀïÒªÔÙÉùÃ÷Ò»´ÎÇÒ²»ÄÜÓÃextern
-TimerHandle_t MainClock_TimerHandle = NULL;		//Ö÷Ê±ÖÓ¶¨Ê±Æ÷¾ä±ú
-TaskHandle_t MainITF_TaskHandle = NULL;				//Ö÷½çÃæÈÎÎñ¾ä±ú
-QueueHandle_t Keys_QueueHandle = NULL;				//°´¼üÏûÏ¢¶ÓÁĞ¾ä±ú
-TaskHandle_t KeysSend_TaskHandle = NULL;			//°´¼üÏûÏ¢·¢ËÍÈÎÎñ¾ä±ú
-TaskHandle_t Menu_TaskHandle = NULL;					//²Ëµ¥ÈÎÎñ¾ä±ú
-TaskHandle_t Light_TaskHandle = NULL;					//ÊÖµçÍ²ÈÎÎñ¾ä±ú
-TaskHandle_t Led_TaskHandle = NULL;						//LedµÆÈÎÎñ¾ä±ú
-TaskHandle_t Servo_TaskHandle = NULL;				//¶æ»úÈÎÎñ¾ä±ú
-TaskHandle_t Music_TaskHandle = NULL;					//ÒôÀÖÈÎÎñ¾ä±ú
-TaskHandle_t Motor_TaskHandle = NULL;					//µç»úÈÎÎñ¾ä±ú
-TaskHandle_t Gyro_TaskHandle = NULL;					//ÍÓÂİÒÇÈÎÎñ¾ä±ú
+/*å¥æŸ„*/
+extern TimerHandle_t MainClock_TimerHandle = NULL;		//ä¸»æ—¶é’Ÿå®šæ—¶å™¨å¥æŸ„
+TaskHandle_t MainITF_TaskHandle = NULL;				//ä¸»ç•Œé¢ä»»åŠ¡å¥æŸ„
+QueueHandle_t Keys_QueueHandle = NULL;				//æŒ‰é”®æ¶ˆæ¯é˜Ÿåˆ—å¥æŸ„
+TaskHandle_t KeysSend_TaskHandle = NULL;			//æŒ‰é”®æ¶ˆæ¯å‘é€ä»»åŠ¡å¥æŸ„
+TaskHandle_t Menu_TaskHandle = NULL;					//èœå•ä»»åŠ¡å¥æŸ„
+TaskHandle_t Light_TaskHandle = NULL;					//æ‰‹ç”µç­’ä»»åŠ¡å¥æŸ„
+TaskHandle_t Led_TaskHandle = NULL;						//Ledç¯ä»»åŠ¡å¥æŸ„
+TaskHandle_t Servo_TaskHandle = NULL;				//èˆµæœºä»»åŠ¡å¥æŸ„
+TaskHandle_t Music_TaskHandle = NULL;					//éŸ³ä¹ä»»åŠ¡å¥æŸ„
+TaskHandle_t Motor_TaskHandle = NULL;					//ç”µæœºä»»åŠ¡å¥æŸ„
+TaskHandle_t Gyro_TaskHandle = NULL;					//é™€èºä»ªä»»åŠ¡å¥æŸ„
 
 uint32_t ticks;
 
-/*º¯ÊıÉùÃ÷*/
+/*å‡½æ•°å£°æ˜*/
 void MainClock_Callback(TimerHandle_t xTimer);
 char* GetMinStr(uint32_t seconds);
 char* GetSecStr(uint32_t seconds);
@@ -44,38 +43,37 @@ void KeysReceive_Task();
 	
 void CreateAllTask()
 {	
-	/*Ö÷Ê±ÖÓ*/
-	//ÎÊÌâ2£ºÎªÊ²Ã´ÔÚÈÎÎñÖĞ´´½¨Ê±ÖÓµÄ»°£¬»á±»´ò¶ÏÄØ£¿£¿²¹³ä£º·¢ÏÖÊÇÆäËüÈÎÎñ²»ÓÃÑ­»·while(1)µÄ»°»á´ò¶Ï
+	/*ä¸»æ—¶é’Ÿ*/
 	MainClock_TimerHandle = xTimerCreate("MainClock_Handle", 1000, pdTRUE, (void*)1, (TimerCallbackFunction_t)MainClock_Callback);
 	if(MainClock_TimerHandle!=NULL)
 		xTimerStart(MainClock_TimerHandle, 0);
 	
 
-	/*°´¼üÏìÓ¦*/
+	/*æŒ‰é”®å“åº”*/
 	Keys_QueueHandle = xQueueCreate(1,sizeof(uint8_t));
 	
-	/*Ö÷½çÃæ*/
+	/*ä¸»ç•Œé¢*/
 	xTaskCreate((TaskFunction_t)MainITF_Task, "MainITF_Task", 256, NULL, 22, &MainITF_TaskHandle);
 	
-	/*²Ëµ¥*/
+	/*èœå•*/
 	xTaskCreate((TaskFunction_t)Menu_Task, "Menu_Task", 256, NULL, 22, &Menu_TaskHandle);
 	
-	/*ÊÖµçÍ²*/
+	/*æ‰‹ç”µç­’*/
 	xTaskCreate((TaskFunction_t)Light_Task, "Light_Task", 256, NULL, 22, &Light_TaskHandle);
 	
-	/*ledµÆ*/
+	/*ledç¯*/
 	xTaskCreate((TaskFunction_t)Led_Task, "Led_Task", 256, NULL, 22, &Led_TaskHandle);
 	
-	/*¶æ»ú*/
+	/*èˆµæœº*/
 	xTaskCreate((TaskFunction_t)Servo_Task, "Servo_Task", 256, NULL, 22, &Servo_TaskHandle);
 	
-	/*ÒôÀÖ*/
+	/*éŸ³ä¹*/
 	xTaskCreate((TaskFunction_t)Music_Task, "Music_Task", 256, NULL, 22, &Music_TaskHandle);
 	
-	/*µç»ú*/
+	/*ç”µæœº*/
 	xTaskCreate((TaskFunction_t)Motor_Task, "Motor_Task", 256, NULL, 22, &Motor_TaskHandle);
 	
-	/*ÍÓÂİÒÇ*/
+	/*é™€èºä»ª*/
 	xTaskCreate((TaskFunction_t)Gyro_Task, "Gyro_Task", 256, NULL, 22, &Gyro_TaskHandle);
 	
 	vTaskStartScheduler();
@@ -83,14 +81,14 @@ void CreateAllTask()
 	
 }
 
-///***************************************************Ö÷Ê±ÖÓÏà¹Ø***************************************************///
-/*¶¨Ê±Æ÷ÖĞ¶Ï»Øµ÷º¯Êı*/
+///***************************************************ä¸»æ—¶é’Ÿç›¸å…³***************************************************///
+/*å®šæ—¶å™¨ä¸­æ–­å›è°ƒå‡½æ•°*/
 void MainClock_Callback(TimerHandle_t xTimer)
 {
 	ticks = xTaskGetTickCount();
 }
 
-/*»ñÈ¡Ö÷Ê±ÖÓµÄ·ÖÖÓ·ÖÁ¿£¬·¶Î§Îª0~99*/
+/*è·å–ä¸»æ—¶é’Ÿçš„åˆ†é’Ÿåˆ†é‡ï¼ŒèŒƒå›´ä¸º0~99*/
 char str_min[10];
 char* GetMinStr(uint32_t seconds)
 {
@@ -101,7 +99,7 @@ char* GetMinStr(uint32_t seconds)
 	return str_min;
 }
 
-/*»ñÈ¡Ö÷Ê±ÖÓµÄÃëÊı·ÖÁ¿£¬·¶Î§Îª0~59*/
+/*è·å–ä¸»æ—¶é’Ÿçš„ç§’æ•°åˆ†é‡ï¼ŒèŒƒå›´ä¸º0~59*/
 char str_sec[10];
 char* GetSecStr(uint32_t seconds)
 {
@@ -110,7 +108,7 @@ char* GetSecStr(uint32_t seconds)
 	sprintf(str_sec, "%02d", sec);
 	return str_sec;
 }
-///***************************************************°´¼üÏà¹Ø***************************************************///
+///***************************************************æŒ‰é”®ç›¸å…³***************************************************///
 
 BaseType_t pxHigherPriorityTaskWoken = pdTRUE;
 uint32_t lastKeyTime;
@@ -121,7 +119,7 @@ void EXTI0_IRQHandler(void)
 	{
 		if(GPIO_ReadInputDataBit(GPIOB, KeyExit)==RESET)
 		{
-			//ÖĞ¶ÏÖĞ²»½¨ÒéÊ¹ÓÃÑÓÊ±£¬ÒªÊ¹ÓÃÑÓÊ±µÄ»°ĞèÒªÅäÖÃ¶¨Ê±Æ÷µÄÓÅÏÈ¼¶¸ßÓÚEXITA
+			//ä¸­æ–­ä¸­ä¸å»ºè®®ä½¿ç”¨å»¶æ—¶ï¼Œè¦ä½¿ç”¨å»¶æ—¶çš„è¯éœ€è¦é…ç½®å®šæ—¶å™¨çš„ä¼˜å…ˆçº§é«˜äºEXITA
 			//vTaskDelay(20);
 			//while(GPIO_ReadInputDataBit(GPIOB, KeyExit)==RESET);
 			//vTaskDelay(20);
